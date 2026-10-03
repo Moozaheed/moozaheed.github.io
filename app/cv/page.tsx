@@ -14,7 +14,7 @@ export default function CVPage() {
       <PageHeader
         category="CURRICULUM VITAE"
         title="Curriculum Vitae & Resume"
-        description="Interactive curriculum vitae and official PDF access covering Backend Systems Architecture, Forward-Deployed Engineering, and Academic Research. Download the updated professional CV (G_M_Mozahad_CV.pdf) or switch between interactive formats below."
+        description="Interactive view-only access to my professional Forward-Deployed / Backend Engineering Resume and my Academic Research CV. Direct download, printing, and unauthorized screen extraction are restricted."
       />
 
       <div className="pt-10">

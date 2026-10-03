@@ -12,8 +12,6 @@ import {
   ZoomOut,
   Maximize2,
   Check,
-  Download,
-  FileText,
 } from "lucide-react";
 import { engineeringCV, academicCV, CVData } from "@/data/cv";
 
@@ -120,39 +118,6 @@ export default function ProtectedCVViewer() {
         </div>
       )}
 
-      {/* Options Bar: Official PDF Access Banner */}
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 mb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50 border border-neutral-200 p-3.5 rounded-sm">
-          <div className="flex items-center gap-2.5">
-            <FileText className="h-4 w-4 text-black shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold text-black font-mono">G_M_Mozahad_CV.pdf</span>
-              <span className="text-neutral-500 ml-2 hidden sm:inline">Official Updated Curriculum Vitae</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <a
-              href="/G_M_Mozahad_CV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-800 hover:text-black uppercase tracking-wider underline underline-offset-4"
-            >
-              <Eye className="h-3.5 w-3.5" />
-              Open PDF
-            </a>
-            <span className="text-neutral-300">·</span>
-            <a
-              href="/G_M_Mozahad_CV.pdf"
-              download="G_M_Mozahad_CV.pdf"
-              className="inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-neutral-800 transition-colors shadow-xs"
-            >
-              <Download className="h-3.5 w-3.5" />
-              Download PDF
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Control Bar: Tabs & View Settings */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border border-neutral-200 bg-white p-3 rounded-sm">
@@ -182,8 +147,13 @@ export default function ProtectedCVViewer() {
             </button>
           </div>
 
-          {/* Controls: PDF Download & Zoom Tools */}
-          <div className="flex flex-wrap items-center gap-2.5 justify-between lg:justify-end">
+          {/* Controls: View-Only Badge & Zoom Tools */}
+          <div className="flex flex-wrap items-center gap-3 justify-between lg:justify-end">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-neutral-100 border border-neutral-200 text-neutral-700 font-mono text-[11px] uppercase tracking-wider">
+              <Lock className="h-3 w-3 text-neutral-800" />
+              <span>Protected View-Only</span>
+            </div>
+
             <div className="flex items-center gap-1 border border-neutral-200 bg-neutral-50 px-2 py-1 rounded-sm">
               <button
                 onClick={() => setZoomLevel((z) => Math.max(z - 10, 80))}
@@ -320,64 +290,68 @@ export default function ProtectedCVViewer() {
               </section>
             )}
 
-            {/* Education (Note: CGPA intentionally hidden per user request) */}
-            <section>
-              <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
-                Education
-              </h2>
-              <div className="space-y-4">
-                {cv.education.map((edu, i) => (
-                  <div key={i}>
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                      <h3 className="text-sm font-bold text-black">{edu.institution}</h3>
-                      <span className="font-mono text-xs text-neutral-600">{edu.period}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs text-neutral-700 mt-0.5">
-                      <p className="font-medium text-black">{edu.degree}</p>
-                      <span className="font-mono text-[11px] text-neutral-600">{edu.location}</span>
-                    </div>
-
-                    {edu.thesis && (
-                      <p className="mt-1.5 text-xs text-neutral-600 font-mono">
-                        <strong className="text-black">Thesis:</strong> {edu.thesis}
-                      </p>
-                    )}
-
-                    {edu.coursework && (
-                      <div className="mt-2">
-                        <span className="font-mono text-[11px] text-neutral-600 block mb-1">
-                          Relevant Coursework:
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {edu.coursework.map((c) => (
-                            <span
-                              key={c}
-                              className="rounded-xs border border-neutral-200 bg-neutral-50 px-1.5 py-0.5 font-mono text-[10px] text-neutral-700"
-                            >
-                              {c}
-                            </span>
-                          ))}
-                        </div>
+            {/* Education (For Academic tab, shown earlier in CV flow) */}
+            {activeTab === "academic" && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Education
+                </h2>
+                <div className="space-y-4">
+                  {cv.education.map((edu, i) => (
+                    <div key={i}>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                        <h3 className="text-sm font-bold text-black">{edu.institution}</h3>
+                        <span className="font-mono text-xs text-neutral-600">{edu.period}</span>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs text-neutral-700 mt-0.5">
+                        <p className="font-medium text-black">{edu.degree}</p>
+                        <span className="font-mono text-[11px] text-neutral-600">{edu.location}</span>
+                      </div>
 
-            {/* Standardized Tests & Languages */}
-            {cv.languages && (
+                      {edu.thesis && (
+                        <p className="mt-1.5 text-xs text-neutral-600 font-mono">
+                          <strong className="text-black">Thesis:</strong> {edu.thesis}
+                        </p>
+                      )}
+
+                      {edu.coursework && (
+                        <div className="mt-2">
+                          <span className="font-mono text-[11px] text-neutral-600 block mb-1">
+                            Relevant Coursework:
+                          </span>
+                          <div className="flex flex-wrap gap-1">
+                            {edu.coursework.map((c) => (
+                              <span
+                                key={c}
+                                className="rounded-xs border border-neutral-200 bg-neutral-50 px-1.5 py-0.5 font-mono text-[10px] text-neutral-700"
+                              >
+                                {c}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Standardized Tests & Languages (For Academic tab) */}
+            {activeTab === "academic" && cv.languages && !Array.isArray(cv.languages) && (
               <section>
                 <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
                   Standardized Tests & Languages
                 </h2>
                 <div className="space-y-1.5 text-xs text-neutral-700">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                    <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
-                      {cv.languages.test}:
-                    </span>
-                    <span className="text-neutral-800">{cv.languages.testScore}</span>
-                  </div>
+                  {cv.languages.test && (
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                      <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
+                        {cv.languages.test}:
+                      </span>
+                      <span className="text-neutral-800">{cv.languages.testScore}</span>
+                    </div>
+                  )}
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
                     <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
                       Languages:
@@ -388,8 +362,8 @@ export default function ProtectedCVViewer() {
               </section>
             )}
 
-            {/* Publications (If present) */}
-            {cv.publications && (
+            {/* Publications (For Academic tab) */}
+            {activeTab === "academic" && cv.publications && (
               <section>
                 <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
                   Publications & Manuscripts Under Review
@@ -405,14 +379,16 @@ export default function ProtectedCVViewer() {
                           {pub.year} · {pub.status}
                         </span>
                       </div>
-                      <ul className="mt-2 space-y-1 text-xs text-neutral-700">
-                        {pub.bullets.map((b, bi) => (
-                          <li key={bi} className="flex items-start gap-2">
-                            <span className="text-neutral-400">•</span>
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {pub.bullets && pub.bullets.length > 0 && (
+                        <ul className="mt-2 space-y-1 text-xs text-neutral-700">
+                          {pub.bullets.map((b, bi) => (
+                            <li key={bi} className="flex items-start gap-2">
+                              <span className="text-neutral-400">•</span>
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -449,10 +425,29 @@ export default function ProtectedCVViewer() {
               </div>
             </section>
 
-            {/* Selected Projects */}
+            {/* Technical Skills (For Engineering tab, positioned right after Experience) */}
+            {activeTab === "engineering" && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Technical Skills
+                </h2>
+                <div className="space-y-2 text-xs text-neutral-700">
+                  {cv.skills.map((skillGroup, i) => (
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                      <span className="font-mono text-xs font-bold text-black sm:w-56 shrink-0">
+                        {skillGroup.category}:
+                      </span>
+                      <span className="text-neutral-700">{skillGroup.items.join(", ")}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Projects */}
             <section>
               <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
-                Selected Production Projects & Systems
+                {activeTab === "engineering" ? "Projects" : "Selected Production Projects & Systems"}
               </h2>
               <div className="space-y-4">
                 {cv.projects.map((proj, i) => (
@@ -479,25 +474,110 @@ export default function ProtectedCVViewer() {
               </div>
             </section>
 
-            {/* Technical Skills */}
-            <section>
-              <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
-                Technical Stack & Competencies
-              </h2>
-              <div className="space-y-2 text-xs text-neutral-700">
-                {cv.skills.map((skillGroup, i) => (
-                  <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                    <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
-                      {skillGroup.category}:
-                    </span>
-                    <span className="text-neutral-700">{skillGroup.items.join(", ")}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {/* Certifications (For Engineering tab) */}
+            {activeTab === "engineering" && cv.certifications && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Certifications
+                </h2>
+                <ul className="space-y-1.5 text-xs text-neutral-700">
+                  {cv.certifications.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 text-black shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-            {/* Honors & Certifications (If present) */}
-            {cv.honorsCertifications && (
+            {/* Publications & Manuscripts (For Engineering tab) */}
+            {activeTab === "engineering" && cv.publications && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Publications & Manuscripts Under Review
+                </h2>
+                <ul className="space-y-2 text-xs text-neutral-700">
+                  {cv.publications.map((pub, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-neutral-400 shrink-0">•</span>
+                      <span>
+                        <strong className="text-black">{pub.title}</strong> — {pub.status}, {pub.year}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Languages (For Engineering tab) */}
+            {activeTab === "engineering" && cv.languages && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Languages
+                </h2>
+                <ul className="space-y-1 text-xs text-neutral-700">
+                  {Array.isArray(cv.languages) ? (
+                    cv.languages.map((lang, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-neutral-400 shrink-0">•</span>
+                        <span>{lang}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="flex items-start gap-2">
+                      <span className="text-neutral-400 shrink-0">•</span>
+                      <span>{cv.languages.languages}</span>
+                    </li>
+                  )}
+                </ul>
+              </section>
+            )}
+
+            {/* Education (For Engineering tab) */}
+            {activeTab === "engineering" && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Education
+                </h2>
+                <div className="space-y-4">
+                  {cv.education.map((edu, i) => (
+                    <div key={i}>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                        <h3 className="text-sm font-bold text-black">{edu.institution}</h3>
+                        <span className="font-mono text-xs text-neutral-600">{edu.period}</span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs text-neutral-700 mt-0.5">
+                        <p className="font-medium text-black">{edu.degree}</p>
+                        <span className="font-mono text-[11px] text-neutral-600">{edu.location}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Technical Skills (For Academic tab) */}
+            {activeTab === "academic" && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Technical Stack & Competencies
+                </h2>
+                <div className="space-y-2 text-xs text-neutral-700">
+                  {cv.skills.map((skillGroup, i) => (
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                      <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
+                        {skillGroup.category}:
+                      </span>
+                      <span className="text-neutral-700">{skillGroup.items.join(", ")}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Honors & Certifications (For Academic tab) */}
+            {activeTab === "academic" && cv.honorsCertifications && (
               <section>
                 <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
                   Honors, Certifications & Achievements
@@ -517,14 +597,14 @@ export default function ProtectedCVViewer() {
             {cv.extracurricular && (
               <section>
                 <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
-                  Extracurricular Leadership & Mentorship
+                  {activeTab === "engineering" ? "Extracurricular Activities" : "Extracurricular Leadership & Mentorship"}
                 </h2>
                 <div className="space-y-3">
                   {cv.extracurricular.map((item, i) => (
                     <div key={i}>
                       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs">
                         <span className="font-bold text-black">
-                          {item.role} | {item.org}
+                          {item.role} {item.org ? `| ${item.org}` : ""}
                         </span>
                         <span className="font-mono text-[11px] text-neutral-600">{item.period}</span>
                       </div>
@@ -536,6 +616,25 @@ export default function ProtectedCVViewer() {
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Hobbies & Interests (If present) */}
+            {cv.hobbies && cv.hobbies.length > 0 && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Hobbies & Interests
+                </h2>
+                <div className="space-y-1.5 text-xs text-neutral-700">
+                  {cv.hobbies.map((h, i) => (
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                      <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
+                        {h.category}:
+                      </span>
+                      <span className="text-neutral-700">{h.description}</span>
                     </div>
                   ))}
                 </div>
