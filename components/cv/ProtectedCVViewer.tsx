@@ -12,6 +12,8 @@ import {
   ZoomOut,
   Maximize2,
   Check,
+  Download,
+  FileText,
 } from "lucide-react";
 import { engineeringCV, academicCV, CVData } from "@/data/cv";
 
@@ -118,11 +120,44 @@ export default function ProtectedCVViewer() {
         </div>
       )}
 
+      {/* Options Bar: Official PDF Access Banner */}
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50 border border-neutral-200 p-3.5 rounded-sm">
+          <div className="flex items-center gap-2.5">
+            <FileText className="h-4 w-4 text-black shrink-0" />
+            <div className="text-xs">
+              <span className="font-bold text-black font-mono">G_M_Mozahad_CV.pdf</span>
+              <span className="text-neutral-500 ml-2 hidden sm:inline">Official Updated Curriculum Vitae</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="/G_M_Mozahad_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-800 hover:text-black uppercase tracking-wider underline underline-offset-4"
+            >
+              <Eye className="h-3.5 w-3.5" />
+              Open PDF
+            </a>
+            <span className="text-neutral-300">·</span>
+            <a
+              href="/G_M_Mozahad_CV.pdf"
+              download="G_M_Mozahad_CV.pdf"
+              className="inline-flex items-center gap-1.5 bg-black text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-neutral-800 transition-colors shadow-xs"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Control Bar: Tabs & View Settings */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-neutral-200 bg-white p-3 rounded-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border border-neutral-200 bg-white p-3 rounded-sm">
           {/* Tab Selector */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setActiveTab("engineering")}
               className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors rounded-sm ${
@@ -147,14 +182,9 @@ export default function ProtectedCVViewer() {
             </button>
           </div>
 
-          {/* Protection Badge & Zoom Tools */}
-          <div className="flex items-center gap-3 justify-between sm:justify-end">
-            <div className="flex items-center gap-1.5 font-mono text-[11px] text-neutral-700 bg-neutral-100 px-2.5 py-1.5 rounded-sm border border-neutral-200">
-              <Lock className="h-3.5 w-3.5 text-black" />
-              <span>Protected View-Only</span>
-            </div>
-
-            <div className="flex items-center gap-1 border-l border-neutral-200 pl-3">
+          {/* Controls: PDF Download & Zoom Tools */}
+          <div className="flex flex-wrap items-center gap-2.5 justify-between lg:justify-end">
+            <div className="flex items-center gap-1 border border-neutral-200 bg-neutral-50 px-2 py-1 rounded-sm">
               <button
                 onClick={() => setZoomLevel((z) => Math.max(z - 10, 80))}
                 aria-label="Zoom out"
@@ -178,7 +208,7 @@ export default function ProtectedCVViewer() {
                 onClick={() => setZoomLevel(100)}
                 aria-label="Reset zoom"
                 title="Reset zoom"
-                className="p-1 text-neutral-700 hover:text-black ml-1"
+                className="p-1 text-neutral-700 hover:text-black ml-0.5"
               >
                 <Maximize2 className="h-3.5 w-3.5" />
               </button>
@@ -254,6 +284,8 @@ export default function ProtectedCVViewer() {
                 <span>{cv.contact.email}</span>
                 <span>•</span>
                 <span>{cv.contact.phone}</span>
+                <span>•</span>
+                <span>{cv.contact.website}</span>
                 <span>•</span>
                 <span>{cv.contact.github}</span>
                 <span>•</span>
@@ -332,6 +364,29 @@ export default function ProtectedCVViewer() {
                 ))}
               </div>
             </section>
+
+            {/* Standardized Tests & Languages */}
+            {cv.languages && (
+              <section>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-black border-b border-neutral-200 pb-1 mb-3">
+                  Standardized Tests & Languages
+                </h2>
+                <div className="space-y-1.5 text-xs text-neutral-700">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                    <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
+                      {cv.languages.test}:
+                    </span>
+                    <span className="text-neutral-800">{cv.languages.testScore}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                    <span className="font-mono text-xs font-bold text-black sm:w-44 shrink-0">
+                      Languages:
+                    </span>
+                    <span className="text-neutral-800">{cv.languages.languages}</span>
+                  </div>
+                </div>
+              </section>
+            )}
 
             {/* Publications (If present) */}
             {cv.publications && (
