@@ -6,7 +6,14 @@ import { ArrowRight, Clock, Calendar, Filter } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { blogPosts } from "@/data/blogs";
 
-const TOPICS = ["All", "Backend Architecture", "AI Safety & Systems", "Federated ML Research", "Database Internals"];
+const TOPICS = [
+  "All",
+  "AI Safety & Systems",
+  "AI Engineering & Delivery",
+  "Backend Architecture",
+  "Federated ML Research",
+  "Database Internals",
+];
 
 export default function BlogPage() {
   const [selectedTopic, setSelectedTopic] = useState("All");

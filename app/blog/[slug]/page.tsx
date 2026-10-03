@@ -21,6 +21,144 @@ export async function generateMetadata({
   };
 }
 
+function formatInline(text: string) {
+  const tokens = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+  return tokens.map((token, i) => {
+    if (token.startsWith("`") && token.endsWith("`") && token.length > 2) {
+      return (
+        <code
+          key={i}
+          className="font-mono text-[0.88em] bg-neutral-100 text-neutral-900 px-1.5 py-0.5 rounded border border-neutral-200"
+        >
+          {token.slice(1, -1)}
+        </code>
+      );
+    }
+    if (token.startsWith("**") && token.endsWith("**") && token.length > 4) {
+      return (
+        <strong key={i} className="font-semibold text-black">
+          {token.slice(2, -2)}
+        </strong>
+      );
+    }
+    return token;
+  });
+}
+
+function ContentBlock({ block, index }: { block: string; index: number }) {
+  if (block.startsWith("```") && block.endsWith("```")) {
+    const lines = block.split("\n");
+    const lang = lines[0].replace("```", "").trim();
+    const code = lines.slice(1, -1).join("\n");
+    return (
+      <div key={index} className="my-6 rounded-sm border border-neutral-800 bg-neutral-950 p-4 font-mono text-xs sm:text-sm text-neutral-100 overflow-x-auto shadow-sm">
+        {lang && (
+          <div className="text-[10px] uppercase font-mono tracking-widest text-neutral-400 mb-2 border-b border-neutral-800 pb-1">
+            {lang}
+          </div>
+        )}
+        <pre className="font-mono leading-relaxed whitespace-pre">
+          <code>{code}</code>
+        </pre>
+      </div>
+    );
+  }
+
+  if (block.startsWith("## ")) {
+    return (
+      <h2 key={index} className="mt-12 mb-4 text-2xl sm:text-3xl font-bold tracking-tight text-black border-b border-neutral-200 pb-2">
+        {block.replace(/^##\s+/, "")}
+      </h2>
+    );
+  }
+
+  if (block.startsWith("### ")) {
+    return (
+      <h3 key={index} className="mt-8 mb-3 text-xl sm:text-2xl font-bold tracking-tight text-black">
+        {block.replace(/^###\s+/, "")}
+      </h3>
+    );
+  }
+
+  if (block.startsWith("#### ")) {
+    return (
+      <h4 key={index} className="mt-6 mb-2 text-sm sm:text-base font-bold font-mono uppercase tracking-wider text-neutral-900">
+        {block.replace(/^####\s+/, "")}
+      </h4>
+    );
+  }
+
+  if (block.startsWith("> ")) {
+    return (
+      <blockquote key={index} className="my-6 border-l-2 border-black bg-neutral-50 px-5 py-3.5 text-base sm:text-lg italic text-neutral-800 rounded-r-sm">
+        {formatInline(block.replace(/^>\s+/, ""))}
+      </blockquote>
+    );
+  }
+
+  if (block.startsWith("- ") || block.startsWith("* ")) {
+    const items = block.split("\n").filter((l) => l.trim().length > 0);
+    return (
+      <ul key={index} className="my-5 space-y-2 pl-6 list-disc text-base sm:text-lg text-neutral-800">
+        {items.map((item, itemIdx) => (
+          <li key={itemIdx} className="leading-relaxed">
+            {formatInline(item.replace(/^[-*]\s+/, ""))}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (/^\d+\.\s/.test(block)) {
+    const items = block.split("\n").filter((l) => l.trim().length > 0);
+    return (
+      <ol key={index} className="my-5 space-y-2 pl-6 list-decimal text-base sm:text-lg text-neutral-800">
+        {items.map((item, itemIdx) => (
+          <li key={itemIdx} className="leading-relaxed">
+            {formatInline(item.replace(/^\d+\.\s+/, ""))}
+          </li>
+        ))}
+      </ol>
+    );
+  }
+
+  if (block.includes("|") && block.includes("---")) {
+    const rows = block.trim().split("\n").map((r) => r.trim()).filter(Boolean);
+    const headerRow = rows[0].split("|").map((c) => c.trim()).filter(Boolean);
+    const dataRows = rows.slice(2).map((r) => r.split("|").map((c) => c.trim()).filter(Boolean));
+    return (
+      <div key={index} className="my-6 overflow-x-auto border border-neutral-200 rounded-sm">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-neutral-100 border-b border-neutral-200 font-mono text-xs uppercase tracking-wider text-black">
+            <tr>
+              {headerRow.map((h, hIdx) => (
+                <th key={hIdx} className="p-3 font-semibold">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-200">
+            {dataRows.map((row, rIdx) => (
+              <tr key={rIdx} className="hover:bg-neutral-50/50">
+                {row.map((cell, cIdx) => (
+                  <td key={cIdx} className="p-3 text-neutral-800 leading-normal">
+                    {formatInline(cell)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  return (
+    <p key={index} className="leading-relaxed text-neutral-800 text-base sm:text-lg">
+      {formatInline(block)}
+    </p>
+  );
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -75,8 +213,8 @@ export default async function BlogPostPage({
       {/* Body Content */}
       <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
         <div className="space-y-6 text-lg text-neutral-800 leading-relaxed">
-          {post.content.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+          {post.content.map((block, index) => (
+            <ContentBlock key={index} block={block} index={index} />
           ))}
         </div>
 
