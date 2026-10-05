@@ -5,10 +5,67 @@ export interface BlogPost {
   readTime: string;
   topic: string;
   summary: string;
+  coverImage?: string;
   content: string[];
 }
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "why-uber-moved-from-postgresql-to-mysql",
+    title: "Why Did Uber Move from PostgreSQL to MySQL? The Storage Engine Internals",
+    date: "October 2026",
+    readTime: "7 min read",
+    topic: "Database Internals",
+    summary:
+      "At first glance, PostgreSQL and MySQL seem interchangeable. But under Uber's scale, the mechanical differences between append-only heap tuple versioning and InnoDB clustered index trees dictate write amplification, replication lag, and operational resilience.",
+    coverImage: "/images/blog/uber-postgresql-to-mysql.png",
+    content: [
+      "At first glance, PostgreSQL and MySQL may seem like interchangeable choices for most software engineering teams. Both are rock-solid, mature, open-source relational databases with decades of battle-testing across thousands of tech stacks.",
+      "But when you operate databases at Uber’s scale, the internal behavior of the storage engine starts to matter a lot. Small architectural divergences that remain invisible at 1,000 queries per second become catastrophic bottlenecks when processing millions of concurrent location updates, trip dispatches, and driver-rider transactions.",
+      "Here is one foundational difference that explains why 👇",
+      "## 1. A Seemingly Harmless UPDATE",
+      "Imagine a standard relational table with six columns and three secondary indexes (for example, indexes on `name`, `email`, and `created_at`).",
+      "Now run a simple, targeted single-column query:\n\n```sql\nUPDATE users SET birth_year = 1990 WHERE id = 42;\n```",
+      "On paper, this query touches exactly one non-indexed column (`birth_year`) on a single record identified by its primary key. You might intuitively expect the database engine to simply seek to row 42, mutate a few bytes of memory, and write a tiny delta to the write-ahead log.",
+      "What actually happens underneath depends entirely on whether your storage engine implements **Append-Only Heap MVCC** (PostgreSQL) or a **Clustered B+Tree with Secondary Indirection** (MySQL InnoDB).",
+      "## 2. PostgreSQL: Heap Tuples, MVCC, and Write Amplification",
+      "In PostgreSQL, an `UPDATE` is closely tied to its Multi-Version Concurrency Control (MVCC) design. Instead of simply overwriting the existing tuple in place, PostgreSQL creates a brand-new row version in the heap table storage.",
+      "The old version remains available on disk for concurrent transactions that may still need to read an earlier consistent snapshot.",
+      "In a typical non-HOT update, the new tuple receives a new physical location on disk, represented by a different `ctid` (tuple identifier). Because PostgreSQL secondary indexes point directly to physical tuple coordinates (`ctid`), the new tuple may require new index entries across every index on that table—even when the indexed column values have not changed at all.",
+      "This can lead to severe **write amplification**.",
+      "### The HOT Optimization (Heap-Only Tuples)",
+      "PostgreSQL does have an important architectural optimization for this scenario: **HOT, or Heap-Only Tuple updates**.",
+      "When an update does not modify any indexed columns AND there is enough contiguous free space on the exact same 8KB disk page (typically configured via table `fillfactor`), PostgreSQL can avoid creating new index entries. Instead, it chains the new tuple directly from the old tuple header inside the same page.",
+      "So the accurate takeaway is not:",
+      "> “PostgreSQL always updates every index.”",
+      "It is:",
+      "> **PostgreSQL’s heap and MVCC architecture can make updates significantly more write-intensive, especially when HOT updates are not possible on heavily indexed tables or when page free space is exhausted.**",
+      "![Architectural comparison: PostgreSQL Append-Only Heap & Index Rewriting vs. MySQL InnoDB Clustered Index with Secondary PK References](/images/blog/uber-postgresql-to-mysql.png)",
+      "## 3. MySQL InnoDB: Clustered Index and Logical PK Pointers",
+      "Now consider **MySQL InnoDB**.",
+      "InnoDB stores table rows directly within the leaf nodes of the **clustered index** (ordered by the Primary Key).",
+      "Secondary indexes in InnoDB do not point to physical row locations or byte offsets. Instead, secondary index leaf nodes store the row's **Primary Key** as a logical pointer.",
+      "- **Updating Non-Indexed Columns**: When an update changes a non-indexed column (`birth_year`), InnoDB updates the row data inside the clustered index page in place (writing undo logs for MVCC). The secondary indexes generally do not need to be modified at all.\n- **Updating Indexed Columns**: If an indexed column changes, the relevant secondary index still needs to be maintained. However, unrelated indexes do not need to be rewritten simply because the row’s physical representation or position changed.",
+      "As the number of secondary indexes on a table increases, this architectural difference between physical pointers (`ctid`) and logical pointers (`Primary Key`) compounds dramatically.",
+      "## 4. Why Uber Moved: The Bigger Scale Story",
+      "This index maintenance disparity was one of the key architectural differences Uber discussed when explaining its move from PostgreSQL toward MySQL and its custom **Schemaless** distributed storage layer.",
+      "But the bigger story goes beyond index maintenance.",
+      "Uber did not switch databases simply because **“MySQL is faster than PostgreSQL.”**",
+      "They were dealing with database architecture at an enormous, global scale where physical streaming replication across petabytes of write-heavy trip tracking exposed several systemic challenges.",
+      "In its 2016 engineering write-up, Uber described several core challenges with its PostgreSQL setup:",
+      "- **Write Amplification**: Massive write volume from unoptimized heap updates flooded disks and exhausted SSD I/O bandwidth.\n- **Replication Overhead**: PostgreSQL physical streaming replication transmits physical WAL records of every dirty disk page (including rewritten secondary index pages) across the network. In contrast, MySQL row-based binary logging (`binlog`) transmits only logical row deltas, consuming vastly less network and replica write bandwidth.\n- **MVCC Limitations on Replicas**: Standby read replicas in PostgreSQL regularly suffered from query cancellations or replication lag when long-running analytic queries conflicted with incoming WAL cleanup.\n- **Difficult Upgrades**: Major version upgrades in older PostgreSQL required lengthy downtime or risky pg_dump/pg_restore cycles, whereas MySQL supported seamless rolling upgrades via binlog replication.\n- **Connection-Scaling Issues**: PostgreSQL’s process-per-connection model (`fork`) consumed substantial OS memory for thousands of concurrent microservice connections, while MySQL’s thread-per-connection handled high connection counts with lower overhead.\n- **Operational Complexity with Large Datasets**: Table bloat, aggressive `autovacuum` tuning, and cache eviction across fast-growing transactional tables created unpredictable operational overhead.",
+      "MySQL and InnoDB offered a different set of trade-offs that fit Uber’s high-velocity, append-heavy, horizontally sharded workloads significantly better at that time.",
+      "## 5. The Core Lesson: Mechanics Under the Abstraction",
+      "The main lesson is simple:",
+      "Database performance is not only about writing clean SQL queries.",
+      "It also depends on what happens mechanically underneath them:",
+      "```\nUPDATE → MVCC → Tuple Versions → Indexes → WAL/Redo → Replication → Storage\n```",
+      "As a database grows, these internal storage engine design decisions become application-level engineering decisions.",
+      "That is what makes database internals so fascinating.",
+      "> **The query may look simple. The work underneath it is not.**",
+      "### Systems Engineering Tags\n`#PostgreSQL` `#MySQL` `#InnoDB` `#DatabaseInternals` `#SystemDesign` `#BackendEngineering` `#DistributedSystems` `#UberEngineering`",
+    ],
+  },
   {
     slug: "aidlc-control-plane-harness-guide",
     title: "AI-DLC Control Plane: The Complete Architectural Guide to Knowledge, Hooks, Sensors, and Quality Gates",

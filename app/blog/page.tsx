@@ -84,22 +84,40 @@ export default function BlogPage() {
                 </div>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black group-hover:underline">
-                <Link href={`/blog/${post.slug}/`}>{post.title}</Link>
-              </h2>
+              <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
+                <div className="flex-1">
+                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black group-hover:underline">
+                    <Link href={`/blog/${post.slug}/`}>{post.title}</Link>
+                  </h2>
 
-              <p className="mt-3 text-base text-neutral-700 leading-relaxed max-w-4xl">
-                {post.summary}
-              </p>
+                  <p className="mt-3 text-base text-neutral-700 leading-relaxed max-w-4xl">
+                    {post.summary}
+                  </p>
 
-              <div className="mt-6">
-                <Link
-                  href={`/blog/${post.slug}/`}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-black hover:underline"
-                >
-                  Read Essay
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                  <div className="mt-6">
+                    <Link
+                      href={`/blog/${post.slug}/`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-black hover:underline"
+                    >
+                      Read Essay
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+
+                {post.coverImage && (
+                  <Link
+                    href={`/blog/${post.slug}/`}
+                    className="shrink-0 w-full md:w-56 overflow-hidden rounded-sm border border-neutral-200 bg-neutral-50 shadow-xs group-hover:border-black transition-colors"
+                  >
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="w-full h-36 object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </Link>
+                )}
               </div>
             </article>
           ))}

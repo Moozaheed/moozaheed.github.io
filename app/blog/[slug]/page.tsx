@@ -88,6 +88,31 @@ function ContentBlock({ block, index }: { block: string; index: number }) {
     );
   }
 
+  if (block.startsWith("![") && block.includes("](") && block.endsWith(")")) {
+    const match = block.match(/^!\[(.*?)\]\((.*?)\)$/);
+    if (match) {
+      const [, alt, src] = match;
+      return (
+        <figure key={index} className="my-8">
+          <div className="overflow-hidden rounded-sm border border-neutral-200 bg-neutral-50 shadow-xs">
+            <img
+              src={src}
+              alt={alt}
+              className="w-full h-auto object-contain max-h-[720px] mx-auto block"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          {alt && (
+            <figcaption className="mt-2.5 text-center font-mono text-xs text-neutral-500">
+              {alt}
+            </figcaption>
+          )}
+        </figure>
+      );
+    }
+  }
+
   if (block.startsWith("> ")) {
     return (
       <blockquote key={index} className="my-6 border-l-2 border-black bg-neutral-50 px-5 py-3.5 text-base sm:text-lg italic text-neutral-800 rounded-r-sm">

@@ -40,5 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# raw local cv assets at root
+# raw local cv and blog scratch assets at root
 /cv*
+/blog=*
