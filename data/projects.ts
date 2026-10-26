@@ -20,6 +20,8 @@ export interface Project {
   name: string;
   slug: string;
   category: string;
+  badge?: string;
+  liveUrl?: string;
   capabilities: string[];
   technology: string[];
   description: string;
@@ -222,6 +224,8 @@ export const projects: Project[] = [
     name: "Moodle Proctoring Pro",
     slug: "moodle-proctoring-pro",
     category: "EdTech & System Security",
+    badge: "Moodle Certified",
+    liveUrl: "https://moodle.org/plugins/quizaccess_proctoring",
     capabilities: [
       "Browser-Native Telemetry Hooks",
       "Low-Overhead Session Inspection",
@@ -288,6 +292,72 @@ export const projects: Project[] = [
         "Successfully prevented off-campus access during on-premise lab examinations across multiple academic departments.",
       lessons:
         "Designing modular plugin extensions that hook directly into core framework lifecycle hooks yields significant maintainability and upgrades without monkey-patching.",
+    },
+  },
+  {
+    id: "magento2-product-qna",
+    number: "08",
+    name: "Magento 2 Product Q&A Module",
+    slug: "magento2-product-qna",
+    category: "E-Commerce & Marketplace Architecture",
+    badge: "Adobe Commerce Marketplace",
+    liveUrl: "https://commercemarketplace.adobe.com/brainstation-23-magento2-product-qna.html",
+    capabilities: [
+      "Adobe Commerce Review Clearance",
+      "Dependency Injection & Service Contracts",
+      "Asynchronous AJAX Inquiries",
+      "Admin Moderation & ACL Pipeline",
+      "Declarative Schema & Foreign Keys",
+      "AI Offer Recommendation Engine (R&D)",
+    ],
+    technology: [
+      "Magento 2",
+      "PHP 8.x",
+      "Adobe Commerce Marketplace",
+      "MySQL",
+      "Knockout.js",
+      "REST APIs",
+      "AI Recommendation Pipeline",
+    ],
+    description:
+      "Official Adobe Commerce Marketplace extension engineered at Brain Station 23 as an R&D learning project exploring Magento 2 enterprise architecture, design patterns, and marketplace standards hands-on—clearing Adobe's official technical and security review process.",
+    hasDeepDive: true,
+    deepDive: {
+      problem:
+        "E-commerce stores often experience buyer hesitation on high-consideration catalog items when product specifications leave unanswered customer questions. Legacy community forums or third-party iframe widgets bloat storefront performance, lack granular administrator moderation workflows, and fail to adhere to Adobe Commerce's stringent marketplace architecture standards.",
+      approach:
+        "Built at Brain Station 23 as an R&D learning project to explore Magento 2's core architecture hands-on. Leveraged Magento's Dependency Injection (DI) container, plugins/interceptors, service contracts, and declarative database schemas to build a lightweight, native on-page AJAX inquiry modal with an automated admin moderation grid (Pending, Approved, Answered, Rejected). Successfully cleared Adobe's comprehensive technical, security, and quality review audits for live publication on the Adobe Commerce Marketplace. Expanding the module with an AI-driven, user-based offer recommendation engine to explore intelligent personalization in e-commerce workflows.",
+      role: "R&D Module Architect & Software Engineer (Brain Station 23)",
+      architecture: {
+        kind: "flow",
+        nodes: [
+          "Product Page",
+          "AJAX Inquiry Modal",
+          "Magento Controller",
+          "Service Contract / Repository",
+          "Declarative MySQL Schema",
+          "Admin Moderation Grid",
+          "AI Recommendation Engine (R&D)",
+        ],
+      },
+      technology: [
+        "Magento 2",
+        "PHP 8.x",
+        "Adobe Commerce Marketplace",
+        "MySQL",
+        "Knockout.js",
+        "REST APIs",
+        "AI/ML Recommendation",
+      ],
+      challenges: [
+        "Clearing Adobe's comprehensive technical review process, including rigorous static code analysis (PHPCS, MEQP), architectural compliance, and strict security audits without third-party dependencies.",
+        "Designing a modular schema with foreign key cascades that cleanly handles high-volume Q&A submissions without slowing down product page cache invalidation (FPC).",
+        "Architecting the ingestion pipeline to feed structured user question data into an experimental AI-driven recommendation engine for personalized e-commerce promotions.",
+      ],
+      result:
+        "Successfully passed Adobe's official technical and marketplace review process to achieve live certification on the Adobe Commerce Marketplace (sku: brainstation-23/magento2-product-qna). Established a reusable R&D architectural template for Magento 2 extension development and AI-integrated personalization at Brain Station 23.",
+      lessons:
+        "Adhering to strict framework-native conventions (service contracts, declarative schemas, and dependency injection) rather than writing custom ad-hoc PHP guarantees long-term upgrade compatibility and makes clearing enterprise certification audits seamless.",
     },
   },
 ];

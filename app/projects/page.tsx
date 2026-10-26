@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Filter } from "lucide-react";
+import { ArrowRight, Filter, ExternalLink } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { projects } from "@/data/projects";
 
@@ -12,6 +12,7 @@ const CATEGORIES = [
   "Distributed Systems",
   "ERP & Commerce",
   "EdTech & Security",
+  "Marketplace & Open Source",
 ];
 
 export default function ProjectsPage() {
@@ -23,6 +24,7 @@ export default function ProjectsPage() {
     if (activeCategory === "Distributed Systems") return project.category.includes("Distributed");
     if (activeCategory === "ERP & Commerce") return project.category.includes("Commerce") || project.category.includes("ERP") || project.category.includes("Platform");
     if (activeCategory === "EdTech & Security") return project.category.includes("EdTech") || project.category.includes("Security") || project.category.includes("Access");
+    if (activeCategory === "Marketplace & Open Source") return !!project.badge || !!project.liveUrl || project.category.includes("Marketplace");
     return true;
   });
 
@@ -68,9 +70,16 @@ export default function ProjectsPage() {
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-4">
-                  <span className="text-sm font-bold text-black">
-                    {project.number}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-black">
+                      {project.number}
+                    </span>
+                    {project.badge && (
+                      <span className="rounded-sm border border-neutral-300 bg-neutral-100 px-2 py-0.5 font-mono text-[10px] uppercase font-bold text-black tracking-wider">
+                        {project.badge}
+                      </span>
+                    )}
+                  </div>
                   <span className="rounded-sm bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-700 font-medium">
                     {project.category}
                   </span>
@@ -98,13 +107,29 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-neutral-100 flex items-center justify-between">
-                <span className="text-xs text-neutral-600">
-                  Role: {project.deepDive?.role || "Lead Architect"}
-                </span>
+              <div className="mt-8 pt-6 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-neutral-600">
+                    Role: {project.deepDive?.role || "Lead Architect"}
+                  </span>
+                  {project.liveUrl && (
+                    <>
+                      <span className="text-neutral-300">·</span>
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-mono text-[11px] text-neutral-700 hover:text-black uppercase tracking-wider underline underline-offset-2"
+                      >
+                        <span>Marketplace</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </>
+                  )}
+                </div>
                 <Link
                   href={`/projects/${project.slug}/`}
-                  className="inline-flex items-center gap-1.5 rounded-sm bg-black px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85"
+                  className="inline-flex items-center gap-1.5 rounded-sm bg-black px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-85 whitespace-nowrap self-start sm:self-auto"
                 >
                   Deep Dive
                   <ArrowRight className="h-3.5 w-3.5" />

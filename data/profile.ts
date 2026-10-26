@@ -31,6 +31,7 @@ export const profile = {
     },
   ],
   highlights: [
+    "Adobe Commerce Marketplace Certified Module",
     "Distributed Systems Architecture",
     "Event-Driven Ingestion & Idempotency",
     "Federated Learning (Privacy & Medical Imaging)",

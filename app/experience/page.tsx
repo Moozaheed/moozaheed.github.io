@@ -34,13 +34,15 @@ const DETAILED_EXPERIENCE = [
     current: true,
     location: "Dhaka, Bangladesh",
     summary:
-      "Forward-deployed engineer for Bloomex (Canada & Australia), architecting high-throughput GPMS, OMS, and ARCA APIs in Laravel Lumen while building scalable microservices and Docker CI/CD pipelines.",
+      "Forward-deployed engineer for Bloomex (Canada & Australia), architecting high-throughput GPMS, OMS, and ARCA APIs in Laravel Lumen while building scalable microservices and Docker CI/CD pipelines. Authored and published the official Magento 2 Product Q&A module on the Adobe Commerce Marketplace.",
     achievements: [
       "Engineered high-throughput OMS, GPMS, and ARCA APIs across Canadian and Australian operations; optimized microservices to eliminate order data loss and reduce warehouse processing latency.",
+      "Architected and published the official Magento 2 Product Q&A module on the Adobe Commerce Marketplace after clearing Adobe's strict technical, architectural, and security review audits.",
+      "Building an AI-driven, user-based offer recommendation engine to explore deeper AI integration and intelligent personalization in e-commerce workflows.",
       "Automated containerized Docker CI/CD pipelines with SonarQube quality gates on AWS infrastructure, ensuring strict code hygiene and zero-downtime releases.",
       "Developed and maintained scalable SaaS applications using Node.js, PHP (Moodle), Electron.js, and Socket.io; applied modern AI-DLC workflows to accelerate testing and deployment cycles.",
     ],
-    technologies: ["Microservice", "AIDLC", "Team Collaboration", "CI/CD", "Laravel Lumen", "Docker", "AWS"],
+    technologies: ["Microservice", "AIDLC", "Adobe Commerce", "Magento 2", "Laravel Lumen", "Docker", "AWS", "Team Collaboration", "CI/CD"],
   },
   {
     id: "academic-cp",

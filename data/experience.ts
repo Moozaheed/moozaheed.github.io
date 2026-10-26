@@ -26,7 +26,7 @@ export const experiences: Experience[] = [
     period: "2024 — Present",
     current: true,
     summary:
-      "Forward-deployed engineer for Bloomex (Canada & Australia), architecting high-throughput GPMS, OMS, and ARCA APIs in Laravel Lumen while building scalable microservices and Docker CI/CD pipelines.",
-    focus: ["Microservice", "AIDLC", "Team Collaboration", "CI/CD"],
+      "Forward-deployed engineer for Bloomex (Canada & Australia), architecting high-throughput GPMS, OMS, and ARCA APIs in Laravel Lumen while building scalable microservices and Docker CI/CD pipelines. Built and published the official Magento 2 Product Q&A module on the Adobe Commerce Marketplace as an R&D learning project.",
+    focus: ["Microservice", "AIDLC", "Adobe Commerce", "Team Collaboration", "CI/CD"],
   },
 ];

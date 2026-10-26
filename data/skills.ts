@@ -8,7 +8,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "backend",
     label: "Backend Systems Architecture",
-    items: ["Node.js", "NestJS", "Laravel", "Lumen", "Microservices", "RESTful APIs", "Event Sourcing"],
+    items: ["Node.js", "NestJS", "Laravel", "Lumen", "Magento 2", "Adobe Commerce", "Microservices", "RESTful APIs", "Event Sourcing"],
   },
   {
     id: "system-design",

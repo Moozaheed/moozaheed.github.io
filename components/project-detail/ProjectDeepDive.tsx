@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
 import ArchitectureDiagram from "./ArchitectureDiagram";
@@ -55,6 +55,11 @@ export default function ProjectDeepDive({ project }: { project: Project }) {
             <span className="rounded-sm bg-neutral-100 px-2 py-0.5 font-mono text-[11px] text-neutral-700">
               {project.category}
             </span>
+            {project.badge && (
+              <span className="rounded-sm border border-neutral-300 bg-neutral-100 px-2.5 py-0.5 font-mono text-[11px] font-bold text-black uppercase tracking-wider">
+                {project.badge}
+              </span>
+            )}
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black max-w-4xl leading-tight">
@@ -65,15 +70,28 @@ export default function ProjectDeepDive({ project }: { project: Project }) {
             {project.description}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            {project.technology.map((tech) => (
-              <span
-                key={tech}
-                className="rounded-sm border border-neutral-200 bg-neutral-50 px-2.5 py-1 font-mono text-xs text-neutral-700"
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-sm bg-black px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-white transition-opacity hover:opacity-90 shadow-xs"
               >
-                {tech}
-              </span>
-            ))}
+                <span>Live Marketplace Listing</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {project.technology.map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-sm border border-neutral-200 bg-neutral-50 px-2.5 py-1 font-mono text-xs text-neutral-700"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -144,10 +162,23 @@ export default function ProjectDeepDive({ project }: { project: Project }) {
 
         {/* Measurable Results */}
         <SectionBlock index="05" title="Results & Impact">
-          <div className="rounded-sm border-l-2 border-black bg-neutral-50 p-6 max-w-2xl">
+          <div className="rounded-sm border-l-2 border-black bg-neutral-50 p-6 max-w-2xl space-y-4">
             <p className="text-base sm:text-lg font-medium text-black leading-relaxed">
               {d.result}
             </p>
+            {project.liveUrl && (
+              <div className="pt-2">
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wider text-black underline underline-offset-4 hover:opacity-75"
+                >
+                  <span>Explore Live Module on Marketplace</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            )}
           </div>
         </SectionBlock>
 

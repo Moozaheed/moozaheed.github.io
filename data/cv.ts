@@ -130,7 +130,7 @@ export const engineeringCV: CVData = {
     },
     {
       category: "Frameworks and Libraries",
-      items: ["Laravel", "Lumen", "Node JS", "NestJS", "React", "Redux", "Next.js", "Electron", "Express"],
+      items: ["Laravel", "Lumen", "Magento 2", "Node JS", "NestJS", "React", "Redux", "Next.js", "Electron", "Express"],
     },
     {
       category: "Distributed & Cloud Systems",
@@ -197,6 +197,15 @@ export const engineeringCV: CVData = {
     },
   ],
   projects: [
+    {
+      name: "Magento 2 Product Q&A Module (Adobe Commerce Marketplace)",
+      stack: "Magento 2, PHP 8.x, Adobe Commerce, MySQL, Knockout.js, REST APIs",
+      period: "2026",
+      bullets: [
+        "Architected an enterprise Product Questions & Answers extension for Magento 2, clearing Adobe's official technical and security review process for live publication on the Adobe Commerce Marketplace.",
+        "Engineered native dependency injection plugins, declarative database schemas, and responsive on-page AJAX inquiry modals with administrator moderation workflows; prototyping an AI-driven personalized offer recommendation engine.",
+      ],
+    },
     {
       name: "Alainstar ERP & E-Commerce",
       stack: "Next.js, Laravel, PostgreSQL, Docker, CI/CD, AWS Services",
@@ -410,6 +419,15 @@ export const academicCV: CVData = {
     },
   ],
   projects: [
+    {
+      name: "Magento 2 Product Q&A Module (Adobe Commerce Marketplace)",
+      stack: "Magento 2, PHP 8.x, Adobe Commerce Marketplace, MySQL, Knockout.js, REST APIs",
+      period: "2026",
+      bullets: [
+        "Architected an enterprise Product Questions & Answers extension for Magento 2, clearing Adobe's official technical and security review process for live publication on the Adobe Commerce Marketplace.",
+        "Engineered native dependency injection plugins, declarative database schemas, and responsive on-page AJAX inquiry modals with administrator moderation workflows; prototyping an AI-driven personalized offer recommendation engine.",
+      ],
+    },
     {
       name: "Tiffin BD",
       stack: "Next.js, React Native, NestJS, TypeScript, MySQL, RabbitMQ, Socket.io, Docker, AWS, Terraform",
